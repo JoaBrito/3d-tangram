@@ -1,11 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//  Loading meshes from external files
-//
-// Copyright (c) 2023-24 by Carlos Martinho
-//
-// INTRODUCES:
-// MODEL DATA, ASSIMP, mglMesh.hpp
+// Drawing a turtle tangram in a 3d space
+// in Clip Space.
+// 
+// G08
+// João Brito 102733
+// Francisco Ramalho 103263
+// Bernardo Baltazar 112211
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,8 +34,10 @@ class MyApp : public mgl::App {
   void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
   void cursorCallback(GLFWwindow* window, double xpos, double ypos) override;
   void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) override;
+  void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) override;
  private:
   void drawScene();
+  double mouseX, mouseY;
 };
 
 ///////////////////////////////////////////////////////////////////////// CAMERA
@@ -66,6 +69,7 @@ void MyApp::drawScene() {
 }
 
 ////////////////////////////////////////////////////////////////////// CALLBACKS
+bool isMouseActive = false;
 
 void MyApp::initCallback(GLFWwindow *win) {
     //initialize all sceneNodes with the corresponding meshes and shaders
@@ -139,13 +143,39 @@ void MyApp::displayCallback(GLFWwindow *win, double elapsed) {
     drawScene(); 
 }
 
+void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
+        isMouseActive = true;
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+    }else if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
+        isMouseActive = false;
+    }
+
+}
+
 void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
-    std::cout << "(" << xpos << "; " << ypos << ")" << std::endl;
-    scene->moveCamera(xpos, ypos);
+    //std::cout << "(" << xpos << "; " << ypos << ")" << std::endl;
+    if (!isMouseActive) return;
+
+    const double sensitivity = 0.005f;
+    double dx = xpos - mouseX;
+    double dy = ypos - mouseY;
+
+    mouseX = xpos;
+    mouseY = ypos;
+
+    float angleX = static_cast<float>(-dx * sensitivity);
+    float angleY = static_cast<float>(-dy * sensitivity);
+
+    //std::cout << mouseX << " " << mouseY << std::endl;
+
+    scene->moveCamera(angleX, angleY);
 }
 
 void MyApp::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-    std::cout << "(" << xoffset << "; " << yoffset << ")" << std::endl;
+    //std::cout << "(" << xoffset << "; " << yoffset << ")" << std::endl;
+
+    scene->changeRadius(yoffset);
 }
 
 /////////////////////////////////////////////////////////////////////////// MAIN
