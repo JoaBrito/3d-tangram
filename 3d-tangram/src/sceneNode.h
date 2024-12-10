@@ -14,7 +14,6 @@ namespace sg {
 	class sceneNode
 	{
 	private:
-		glm::mat4 modelMatrix;
 
 		GLint modelMatrixId;
 		const GLuint UBO_BP = 0;
@@ -26,6 +25,7 @@ namespace sg {
 
 		vector<sceneNode> sceneNodes;
 	public:
+		glm::mat4 modelMatrix;
 		sceneNode(string meshFile);
 		sceneNode();
 		void createMesh(string meshFile) {
@@ -60,7 +60,7 @@ namespace sg {
 		}
 		void addObject(sceneNode sceneNode);
 		void transform(glm::mat4 transformation);
-		void transform(float r, glm::vec3 t, float sx, float sy); //transform the object inside on itself to allign inside parent
+		void transform(float rx, float ry ,float rz, glm::vec3 t, float sx, float sy, float sz); //transform the object inside on itself to allign inside parent
 		void draw();      //draw object in scene
 	};
 }

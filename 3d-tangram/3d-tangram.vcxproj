@@ -138,7 +138,7 @@
     <ClCompile Include="..\libs\mgl\mglError.cpp" />
     <ClCompile Include="..\libs\mgl\mglMesh.cpp" />
     <ClCompile Include="..\libs\mgl\mglShader.cpp" />
-    <ClCompile Include="src\mesh-loader.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\sceneGraph.cpp" />
     <ClCompile Include="src\sceneNode.cpp" />
   </ItemGroup>

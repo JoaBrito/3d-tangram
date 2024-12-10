@@ -15,6 +15,9 @@ using namespace std;
 #define MAIN_CAMERA 0
 #define SECOND_CAMERA 1
 
+#define ORTHO_CAMERA 0
+#define PERSPECTIVE_CAMERA 1
+
 namespace sg {
 	class sceneGraph
 	{
@@ -28,6 +31,7 @@ namespace sg {
 		vector<sceneNode> sceneNodes;
 
 		int chosenCamera = MAIN_CAMERA;
+		int chosenPerspective = ORTHO_CAMERA;
 	public:
 		sceneGraph(vector<glm::mat4> vm, vector<glm::mat4> pm); //initialize cameras and sceneNode
 		void createCamera() {
@@ -35,8 +39,13 @@ namespace sg {
 			camera->setViewMatrix(viewMatrix[MAIN_CAMERA]);
 			camera->setProjectionMatrix(projectionMatrix[MAIN_CAMERA]);
 		}
-		void changeCamera(int cameraId); //change camera attributes
-		void moveCamera(/**/); //update camera on mouse movement
+		void addSceneNode(sceneNode node) {
+			sceneNodes.push_back(node);
+		}
+		void switchCameraId() { chosenCamera = (chosenCamera + 1) % 2; changeCamera(chosenCamera, chosenPerspective);}
+		void switchCameraPerspective() { chosenPerspective = (chosenPerspective+1)%2;   changeCamera(chosenCamera, chosenPerspective); }
+		void changeCamera(int cameraId, int perspectiveId); //change camera attributes
+		void moveCamera(double xpos, double ypos); //update camera on mouse movement
 		void drawScene(); //draw the scene
 	};
 }
